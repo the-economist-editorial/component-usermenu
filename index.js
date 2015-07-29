@@ -16,9 +16,7 @@ var _economistComponentAuthenticated = require('@economist/component-authenticat
 
 var _economistComponentAuthenticated2 = _interopRequireDefault(_economistComponentAuthenticated);
 
-var _economistComponentIcon = require('@economist/component-icon');
-
-var _economistComponentIcon2 = _interopRequireDefault(_economistComponentIcon);
+var authenticated = new _economistComponentAuthenticated2['default']();
 
 var UserMenu = (function (_React$Component) {
   _inherits(UserMenu, _React$Component);
@@ -26,57 +24,67 @@ var UserMenu = (function (_React$Component) {
   function UserMenu() {
     _classCallCheck(this, UserMenu);
 
-    _React$Component.apply(this, arguments);
+    _React$Component.call(this);
+    this.state = { isLoggedIn: 'loading' };
   }
 
-  // TODO
-  // Comment link is related to username, username is an
-  // information present on AuthenticatedComponent
-  // Implement the propagation of user information
-  // to children so the link can be created
-  // <li><a href="https://www.economist.com/users/<username>/comments">
-  // My comments</a></li>
+  UserMenu.prototype.componentDidMount = function componentDidMount() {
+    this.setState({ isLoggedIn: authenticated.getCookie('s_cc') });
+  };
 
   UserMenu.prototype.render = function render() {
+    var userLogin = undefined;
+    if (this.state.isLoggedIn === 'loading') {
+      userLogin = _react2['default'].createElement(
+        'a',
+        { href: "https://www.economist.com/user/login?destination=node%2F21555491", className: "log-in-btn" },
+        'Loading...'
+      );
+    } else {
+      if (typeof this.state.isLoggedIn === 'undefined') {
+        userLogin = _react2['default'].createElement(
+          'a',
+          { href: "https://www.economist.com/user/login?destination=node%2F21555491", className: "log-in-btn" },
+          'LOG IN or REGISTER'
+        );
+      } else {
+        userLogin = _react2['default'].createElement(
+          'div',
+          null,
+          _react2['default'].createElement(
+            'a',
+            { href: "https://www.economist.com/logout", className: "log-out-btn" },
+            'LOG OUT'
+          ),
+          _react2['default'].createElement(
+            'ul',
+            null,
+            _react2['default'].createElement(
+              'li',
+              null,
+              _react2['default'].createElement(
+                'a',
+                { href: "https://www.economist.com/user" },
+                'My account'
+              )
+            ),
+            _react2['default'].createElement(
+              'li',
+              null,
+              _react2['default'].createElement(
+                'a',
+                { href: "https://www.economist.com/admin" },
+                'Administer'
+              )
+            )
+          )
+        );
+      }
+    }
     return _react2['default'].createElement(
-      _economistComponentAuthenticated2['default'],
+      'div',
       null,
-      _react2['default'].createElement(
-        'a',
-        { showIfNotLoggedIn: 'true',
-          href: 'https://www.economist.com/user/login?destination=node%2F21555491',
-          className: 'log-in-btn' },
-        'LOG IN or REGISTER'
-      ),
-      _react2['default'].createElement(
-        'a',
-        { showIfLoggedIn: 'true',
-          href: 'https://www.economist.com/logout',
-          className: 'log-out-btn' },
-        'LOG OUT'
-      ),
-      _react2['default'].createElement(
-        'ul',
-        { showIfLoggedIn: 'true' },
-        _react2['default'].createElement(
-          'li',
-          null,
-          _react2['default'].createElement(
-            'a',
-            { href: 'https://www.economist.com/user' },
-            'My account'
-          )
-        ),
-        _react2['default'].createElement(
-          'li',
-          null,
-          _react2['default'].createElement(
-            'a',
-            { href: 'https://www.economist.com/admin' },
-            'Administer'
-          )
-        )
-      )
+      userLogin
     );
   };
 
