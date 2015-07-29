@@ -1,29 +1,42 @@
 import React from 'react';
-import AuthenticatedComponent from '@economist/component-authenticated';
+import Authenticated from '@economist/component-authenticated';
 
+const authenticated = new Authenticated();
 export default class UserMenu extends React.Component {
 
-  // Comment link is related to username, username is an
-  // information present on AuthenticatedComponent
-  // Implement the propagation of user information
-  // to children so the link can be created
-  // <li><a href="https://www.economist.com/users/<username>/comments">
-  // My comments</a></li>
+  constructor() {
+    super();
+    this.state = { isLoggedIn: 'loading' };
+  }
+
+   componentDidMount() {
+    this.setState({ isLoggedIn: authenticated.getCookie('mm-logged-in-state') });
+  }
 
   render() {
+    let userLogin;
+    if (this.state.isLoggedIn === 'loading') {
+      userLogin = (<a href="https://www.economist.com/user/login?destination=node%2F21555491"
+        className="log-in-btn">Loading...</a>);
+    } else if (typeof this.state.isLoggedIn === 'undefined') {
+      userLogin = (<a href="https://www.economist.com/user/login?destination=node%2F21555491"
+        className="log-in-btn">LOG IN or REGISTER</a>);
+    } else {
+      userLogin = (
+        <div>
+          <a href="https://www.economist.com/logout" className="log-out-btn">LOG OUT</a>
+          <ul>
+            <li><a href="https://www.economist.com/user">My account</a></li>
+            <li><a href="https://www.economist.com/admin">Administer</a></li>
+          </ul>
+        </div>
+      );
+    }
+
     return (
-      <AuthenticatedComponent>
-        <a showIfNotLoggedIn="true"
-         href="https://www.economist.com/user/login?destination=node%2F21555491"
-         className="log-in-btn">LOG IN or REGISTER</a>
-        <a showIfLoggedIn="true"
-        href="https://www.economist.com/logout"
-        className="log-out-btn">LOG OUT</a>
-        <ul showIfLoggedIn="true">
-          <li><a href="https://www.economist.com/user">My account</a></li>
-          <li><a href="https://www.economist.com/admin">Administer</a></li>
-        </ul>
-      </AuthenticatedComponent>
+      <div>
+        {userLogin}
+      </div>
     );
   }
 }
