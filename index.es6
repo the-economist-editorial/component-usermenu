@@ -27,14 +27,13 @@ export default class UserMenu extends React.Component {
           <a href="https://www.economist.com/logout" className="log-out-btn">LOG OUT</a>
           <ul>
             <li><a href="https://www.economist.com/user">My account</a></li>
-            <li><a href="https://www.economist.com/admin">Administer</a></li>
           </ul>
         </div>
       );
     }
 
     return (
-      <div>
+      <div className="UserMenu-container">
         {userLogin}
       </div>
     );
