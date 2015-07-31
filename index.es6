@@ -33,7 +33,7 @@ export default class UserMenu extends React.Component {
     }
 
     return (
-      <div className="user-login-container">
+      <div className="UserMenu-container">
         {userLogin}
       </div>
     );
